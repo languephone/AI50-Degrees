@@ -105,10 +105,15 @@ def shortest_path(source, target):
             return False
         else:
             node = frontier.remove()
+        
         if node.state == target:
             # Run code to trace back path
-            print("Found")
-            return node.state
+            actions = []
+            while node.parent is not None:
+                actions.append(node.action)
+                node = node.parent
+            actions.reverse() 
+            return actions
         else:
             explored_nodes.add(node)
             neighbours = neighbors_for_person(node.state)
