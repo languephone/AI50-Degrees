@@ -92,18 +92,19 @@ def shortest_path(source, target):
     If no possible path, returns None.
     """
 
-    # Create starting node and frontier
+    # Create starting node, frontier, and explored set
     starting_node = Node(state=source, parent=None, action=None)
-    explored_nodes = set()
     frontier = QueueFrontier()
     frontier.add(starting_node)
+    explored_nodes = set()
     
     # Loop until solution found
     while True:
 
         if frontier.empty():
-            return False
+            return None
         else:
+            # Choose a node from the frontier
             node = frontier.remove()
         
         if node.state == target:
@@ -115,12 +116,14 @@ def shortest_path(source, target):
             actions.reverse() 
             return actions
         else:
-            explored_nodes.add(node)
+            # Get next nodes and add to frontier
+            explored_nodes.add(node.state)
             neighbours = neighbors_for_person(node.state)
             for movie_id, person_id in neighbours:
-                new_node = Node(state=person_id, parent=node,
-                    action=(movie_id, person_id))
-                frontier.add(new_node)
+                if person_id not in explored_nodes:
+                    new_node = Node(state=person_id, parent=node,
+                        action=(movie_id, person_id))
+                    frontier.add(new_node)
 
 
 
